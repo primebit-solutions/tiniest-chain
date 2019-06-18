@@ -19,6 +19,24 @@ appConfig() {
 }
 /*start app routing*/ 
 includeRoutes(app){
+
+    app.get("/mine_block",function(req,res){
+        const previousBlock = blockchain.getLastBlock();
+        const proof = blockchain.proofOfWork(previousBlock.proof);
+        const previousHash = blockchain.generateHash(previousHash);
+        const block = blockchain.createBlock({
+            previousHash: previousHash,
+            proof: proof
+        });
+        const jsonResponse = {
+            message : 'Mined a new block',
+            index : block.index,
+            timestamp: block.timestamp,
+            data: block.data,
+            previous_hash: block.previous_hash
+        }
+        response.status(200).json(jsonResponse);
+    });
     app.get("**", function(req,res){
         res.status(200).json({message:'404 page not found'});
     });
